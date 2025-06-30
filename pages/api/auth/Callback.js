@@ -9,7 +9,7 @@ export default function AuthCallback() {
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN') {
-        router.push('/#communityv3');
+        router.push('/#community');
       }
     });
   }, []);
