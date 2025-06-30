@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import Link from "next/link";
-import Tilt from "react-tilt";
+
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 

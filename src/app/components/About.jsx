@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import Tilt from "react-tilt";
+import Tilt from 'react-parallax-tilt';
+
 import { motion } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -14,60 +15,62 @@ import { fadeIn, textVariant } from "../utils/motion";
 gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
 const ServiceCard = ({ index, title, icon }) => (
-  <Tilt className="xs:w-[250px]">
-    <motion.div
-      variants={fadeIn("right", "spring", index * 0.5, 0.75)}
-      className="w-[300px] md:w-[400px] bg-gradient-to-br from-purple-600 to-pink-600 p-[4px] rounded-2xl border-4 border-black shadow-2xl"
+  <Tilt
+  className="xs:w-[250px]"
+  tiltMaxAngleX={45}
+  tiltMaxAngleY={45}
+  scale={1}
+  transitionSpeed={450}
+  glareEnable={false} // optional
+>
+  <motion.div
+    variants={fadeIn("right", "spring", index * 0.5, 0.75)}
+    className="w-[300px] md:w-[400px] bg-gradient-to-br from-purple-600 to-pink-600 p-[4px] rounded-2xl border-4 border-black shadow-2xl"
+  >
+    <div
+      className="bg-white rounded-xl min-h-[250px] md:min-h-[300px] flex flex-col justify-center items-center border-2 border-black relative overflow-hidden"
     >
-      <div
-        options={{
-          max: 45,
-          scale: 1,
-          speed: 450,
-        }}
-        className="bg-white rounded-xl min-h-[250px] md:min-h-[300px] flex flex-col justify-center items-center border-2 border-black relative overflow-hidden"
-      >
-        {/* Comic dots pattern - positioned behind image */}
-        <div className="absolute inset-0 opacity-10 z-0">
-          {[...Array(20)].map((_, i) => (
-            <div
-              key={i}
-              className="comic-dot absolute w-2 h-2 bg-purple-500 rounded-full"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 2}s`
-              }}
-            />
-          ))}
-        </div>
-        
-        {/* Image - stretched to fill the entire card */}
-        {icon && (
-          <img
-            src={icon}
-            alt={title || "service-icon"}
-            className="w-full h-full min-h-[250px] md:min-h-[300px] object-cover relative z-10 rounded-lg"
-            onError={(e) => {
-              e.target.style.display = 'none';
-              e.target.nextSibling.style.display = 'flex';
+      {/* Comic dots */}
+      <div className="absolute inset-0 opacity-10 z-0">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="comic-dot absolute w-2 h-2 bg-purple-500 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 2}s`
             }}
           />
-        )}
-        
-        {/* Fallback placeholder - also stretched */}
-        <div 
-          className="w-full h-full min-h-[250px] md:min-h-[300px] bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center relative z-10" 
-          style={{display: 'none'}}
-        >
-          <div className="text-center text-white">
-            <div className="text-4xl mb-2">🎨</div>
-            <p className="font-comic font-bold">COMING SOON</p>
-          </div>
+        ))}
+      </div>
+
+      {/* Main image */}
+      {icon && (
+        <img
+          src={icon}
+          alt={title || "service-icon"}
+          className="w-full h-full min-h-[250px] md:min-h-[300px] object-cover relative z-10 rounded-lg"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            e.target.nextSibling.style.display = 'flex';
+          }}
+        />
+      )}
+
+      {/* Fallback placeholder */}
+      <div
+        className="w-full h-full min-h-[250px] md:min-h-[300px] bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center relative z-10"
+        style={{ display: 'none' }}
+      >
+        <div className="text-center text-white">
+          <div className="text-4xl mb-2">🎨</div>
+          <p className="font-comic font-bold">COMING SOON</p>
         </div>
       </div>
-    </motion.div>
-  </Tilt>
+    </div>
+  </motion.div>
+</Tilt>
 );
 
 const About = () => {

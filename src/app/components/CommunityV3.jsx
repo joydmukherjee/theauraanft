@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import Tilt from "react-tilt";
+
 import gsap from "gsap";
 import { motion, AnimatePresence } from "framer-motion";
 import supabase from "../utils/supabase";

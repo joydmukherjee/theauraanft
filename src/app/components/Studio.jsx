@@ -1,7 +1,7 @@
 // components/Studio.jsx
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import Tilt from "react-tilt";
+
 import { motion } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";

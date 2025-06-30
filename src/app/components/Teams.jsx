@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import Tilt from "react-tilt";
+import Tilt from 'react-parallax-tilt';
 import { styles } from "../styles";
 import Link from "next/link";
 import { SectionWrapper } from "../hoc";
@@ -17,21 +17,20 @@ const FeedbackCard = ({
 }) => (
   <motion.div
     variants={fadeIn("", "spring", index * 0.5, 0.75)}
-    className=" xs:w-[320px] w-[320px] "
+    className="xs:w-[320px] w-[320px]"
   >
     <Tilt
-      options={{
-        max: 45,
-        scale: 1,
-        speed: 450,
-      }}
-      className="bg-tertiary p-5 rounded-2xl sm:w-[310px] w-[350px] "
+      tiltMaxAngleX={45}
+      tiltMaxAngleY={45}
+      scale={1}
+      transitionSpeed={450}
+      className="bg-tertiary p-5 rounded-2xl sm:w-[310px] w-[350px]"
     >
-      <div className="relative w-[310px] h-[300px] ">
+      <div className="relative w-[310px] h-[300px]">
         <img
           src={image}
           alt="project_image"
-          className=" max-w-[310px] max-h-[310px] object-cover rounded-2xl"
+          className="max-w-[310px] max-h-[310px] object-cover rounded-2xl"
         />
       </div>
 

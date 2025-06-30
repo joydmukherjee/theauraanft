@@ -1,5 +1,5 @@
 import React from "react";
-import Tilt from "react-tilt";
+
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { styles } from "../styles";
