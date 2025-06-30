@@ -1,0 +1,11 @@
+Model Information:
+* title:	High quality Octopus
+* source:	https://sketchfab.com/3d-models/high-quality-octopus-4819f2e0667e436fb0ee4b5a0a3d8ea1
+* author:	Al-Deezel (https://sketchfab.com/Al-dezel)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "High quality Octopus" (https://sketchfab.com/3d-models/high-quality-octopus-4819f2e0667e436fb0ee4b5a0a3d8ea1) by Al-Deezel (https://sketchfab.com/Al-dezel) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
