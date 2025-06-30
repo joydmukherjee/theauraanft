@@ -43,10 +43,10 @@ const HomePage = () => {
       {/* <Showcase /> */}
       {/* <Utility /> */}
       <Roadmap />
-      {/* <Community /> */}
+      <Community />
       {/* <CommunityV1 /> */}
       {/* <CommunityV2 /> */}
-      <CommunityV3 />
+      {/* <CommunityV3 /> */}
       {/* <MintVersion2 /> */}
       <Studio />
       <Teams />

@@ -63,10 +63,10 @@ export const navLinks = [
     id: "roadmap",
     title: "Roadmap",
   },
-  // {
-  //   id: "community",
-  //   title: "Community",
-  // },
+  {
+    id: "community",
+    title: "Community",
+  },
   // {
   //   id: "communityv1",
   //   title: "CommunityV1",
@@ -75,10 +75,10 @@ export const navLinks = [
   //   id: "communityv2",
   //   title: "CommunityV2",
   // },
-  {
-    id: "communityV3",
-    title: "Community",
-  },
+  // {
+  //   id: "communityV3",
+  //   title: "Community",
+  // },
   {
     id: "studio",
     title: "3D Studio",
