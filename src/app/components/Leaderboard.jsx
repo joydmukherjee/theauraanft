@@ -299,7 +299,7 @@ const Leaderboard = () => {
                       {user.twitter_connected && (
                         <div className="relative group">
                           <img
-                            src="https://via.placeholder.com/32x32/1da1f2/ffffff?text=X"
+                            src="/Xbadge.jpg"
                             alt="Twitter Connected"
                             className="w-8 h-8 rounded-full border-2 border-blue-400 shadow-lg hover:scale-110 transition-transform cursor-pointer"
                           />
@@ -312,7 +312,7 @@ const Leaderboard = () => {
                       {user.discord_connected && (
                         <div className="relative group">
                           <img
-                            src="https://via.placeholder.com/32x32/5865f2/ffffff?text=D"
+                            src="/discordbadge.png" // Discord badge image URL
                             alt="Discord Connected"
                             className="w-8 h-8 rounded-full border-2 border-indigo-400 shadow-lg hover:scale-110 transition-transform cursor-pointer"
                           />
