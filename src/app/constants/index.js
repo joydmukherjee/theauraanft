@@ -76,8 +76,8 @@ export const navLinks = [
   //   title: "CommunityV2",
   // },
   {
-    id: "communityv3",
-    title: "CommunityV3",
+    id: "communityV3",
+    title: "Community",
   },
   {
     id: "studio",
