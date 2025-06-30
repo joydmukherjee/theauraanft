@@ -31,7 +31,17 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body {
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
+  background-color: rgb(6, 1, 24);
 }
 
 .custom-color-time {
@@ -52,9 +62,6 @@ html {
   margin-top: -100px;
   padding-bottom: 100px;
   display: block;
-}
-body {
-  background-color: rgb(6, 1, 24);
 }
 
 .letter {
