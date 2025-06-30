@@ -73,6 +73,7 @@ const App = ({ Component, pageProps }) => {
         <>
          <Head>
         <title>AURA</title>
+         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/Aura_purple.png" /> {/* Replace with your logo file name and extension */}
       </Head>
       <SessionProvider session={pageProps.session}>

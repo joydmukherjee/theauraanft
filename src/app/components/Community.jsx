@@ -1000,7 +1000,7 @@ const handleDiscordConnect = async () => {
     try {
       sessionStorage.setItem('discord_oauth_in_progress', 'true');
       await signIn("discord", { 
-        callbackUrl: window.location.origin + "/#communityv3" 
+        callbackUrl: window.location.origin + "/#community" 
       });
     } catch (error) {
       console.error('Error starting Discord OAuth:', error);
@@ -1487,7 +1487,7 @@ const updateTwitterFollowStatus = async (username, currentPoints = 0) => {
   
   
 // Update your handleTwitterConnect function
-// Simplified Twitter Connect Handler for CommunityV1.jsx
+// Simplified Twitter Connect Handler for Community.jsx
 const handleTwitterConnect = async () => {
   if (session?.twitter_username ) {
     // User is already connected via NextAuth twitter- check if they've already received points
@@ -1551,7 +1551,7 @@ const handleTwitterConnect = async () => {
          // Set flag to indicate OAuth is in progress
       sessionStorage.setItem('twitter_oauth_in_progress', 'true');
       await signIn("twitter", { 
-        callbackUrl: window.location.origin + "/#communityv3" 
+        callbackUrl: window.location.origin + "/#community" 
       });
     } catch (error) {
       console.error('Error starting Twitter OAuth:', error);

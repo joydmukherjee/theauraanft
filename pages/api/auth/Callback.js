@@ -7,6 +7,7 @@ export default function AuthCallback() {
   const supabase = createPagesBrowserClient();
 
   useEffect(() => {
+    console.log('AuthCallback component mounted');
     supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN') {
         router.push('/#community');
