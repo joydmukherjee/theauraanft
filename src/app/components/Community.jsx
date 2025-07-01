@@ -1998,116 +1998,16 @@ const handleGameAction = () => {
     setShowCelebration(true);
   };
 
-  const GameActionCard = ({ 
-  icon, 
-  title, 
-  description, 
-  buttonText, 
-  buttonVariant = "primary",
-  onAction,
-  gradientFrom,
-  gradientTo,
-  borderColor,
-  imageUrl,
-  reverseLayout = false
-}) => {
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  const handleClick = async () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    try {
-      await onAction();
-    } finally {
-      setTimeout(() => setIsAnimating(false), 3000);
-    }
-  };
-
-  return (
-   <motion.div
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.5 }}
-  className={`relative w-full my-8 group ${reverseLayout ? 'pl-8' : 'pr-8'}`} // Removed overflow-hidden
->
-  {/* ===== OUTER GLOW EFFECT (NEW) ===== */}
-  <div className="absolute -inset-2 rounded-xl overflow-visible pointer-events-none z-0">
-    {/* Base Glow Layer */}
-    <div className="absolute inset-0 rounded-xl bg-purple-500 opacity-0 group-hover:opacity-50 blur-xl transition-opacity duration-300"></div>
-    {/* Edge Highlight */}
-    <div className="absolute inset-0 rounded-xl bg-white opacity-0 group-hover:opacity-20 blur-md transition-opacity duration-500"></div>
-  </div>
-
-  {/* Existing glowing border */}
-  <div className={`absolute top-0 bottom-0 w-1 ${reverseLayout ? 'right-0' : 'left-0'} 
-    bg-gradient-to-b from-white via-purple-800 to-white shadow-[0_0_15px_5px_rgba(191,82,222,0.5)] z-10`}
-  ></div>
   
-  {/* Main card container */}
-  <div className={`relative z-20 flex ${reverseLayout ? 'flex-row-reverse' : 'flex-row'} 
-    bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl overflow-hidden
-    border border-gray-700 h-96`}
-  >
-    {/* Image side */}
-    <div className="w-1/2 relative overflow-hidden h-full">
-      <motion.div
-        className="relative w-full h-full overflow-hidden"
-        whileInView={{
-          y: [0, -15, 0],
-          transition: {
-            duration: 8,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "linear"
-          }
-        }}
-        viewport={{ once: false }}
-      >
-        <motion.img
-          src={imageUrl}
-          alt={title}
-          className="relative z-10 w-full h-full object-cover"
-          whileHover={{ 
-            scale: 1.1,
-            transition: { duration: 0.3 } 
-          }}
-        />
-      </motion.div>
-      
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4 pointer-events-none z-20">
-         <div className="[&>img]:w-12 [&>img]:h-12">
-    {typeof icon === 'string' ? (
-      <span className="text-5xl">{icon}</span>
-    ) : (
-      icon
-    )}
-  </div>
-      </div>
-    </div>
-    
-    {/* Content side */}
-    <div className="w-1/2 p-6 flex flex-col justify-between">
-      <div>
-        <h3 className="text-2xl font-bold text-white mb-2 font-mono tracking-wider">{title}</h3>
-        <p className="text-white mb-4">{description}</p>
-      </div>
-      
-      <GameButton 
-        onClick={handleClick} 
-        variant={buttonVariant}
-        className={`w-full pulse-on-hover ${isAnimating ? 'animate-pulse' : ''}`}
-        disabled={isAnimating}
-      >
-        {isAnimating ? '...' : buttonText}
-      </GameButton>
-    </div>
-  </div>
-</motion.div>
-  );
-};
 
 return (
   <>
+
+   <LoadingOverlay 
+        isVisible={loadingState.isVisible} 
+        message={loadingState.message} 
+      />
+      
     {/* Add Toast component */}
     <Toast 
       show={toast.show} 
