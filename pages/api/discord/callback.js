@@ -17,7 +17,9 @@ export default async function handler(req, res) {
 
   if (!code) {
     console.log('ERROR: No OAuth code provided');
-    return res.redirect('http://localhost:3000/#communityv2?discord_error=oauth_code_missing');
+    //return res.redirect('http://localhost:3000/#communityv2?discord_error=oauth_code_missing');
+    return res.redirect(`${process.env.NEXTAUTH_URL}/#community?discord_error=oauth_code_missing`);
+    
   }
 
   try {
@@ -68,7 +70,7 @@ export default async function handler(req, res) {
     console.log('Final Discord username:', discordUsername);
 
     // Step 3: Redirect with Discord user info
-    const redirectUrl = `http://localhost:3000/#communityv3?discord_success=true&discord_username=${encodeURIComponent(discordUsername)}&discord_id=${discordUser.id}`;
+    const redirectUrl = `${process.env.NEXTAUTH_URL}/#community?discord_success=true&discord_username=${encodeURIComponent(discordUsername)}&discord_id=${discordUser.id}`;
     
     console.log('Redirecting to:', redirectUrl);
     res.redirect(redirectUrl);
@@ -78,6 +80,7 @@ export default async function handler(req, res) {
     console.error('Error details:', err.message);
     
     // Redirect with error
-    res.redirect('http://localhost:3000/#communityv3?discord_error=oauth_failed');
+    res.redirect(`${process.env.NEXTAUTH_URL}/#community?discord_error=oauth_failed`);
+    
   }
 }

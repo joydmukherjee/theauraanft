@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   // Check for OAuth errors
   if (error) {
     console.error('OAuth error:', error);
-    return res.redirect(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/#communityv2?twitter_error=${error}`);
+    return res.redirect(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/#community?twitter_error=${error}`);
   }
 
   // Verify state parameter
@@ -89,7 +89,7 @@ export default async function handler(req, res) {
     console.log('Successfully authenticated user:', username);
 
     // Redirect back to frontend with success data
-    const redirectUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/#communityv2?twitter_success=true&twitter_username=${encodeURIComponent(username)}&twitter_id=${userId}`;
+    const redirectUrl = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/#community?twitter_success=true&twitter_username=${encodeURIComponent(username)}&twitter_id=${userId}`;
     
     res.redirect(redirectUrl);
 
