@@ -19,6 +19,21 @@ import CelebrationPopup from "./CelebrationPopup";
 import TwitterModal from "./TwitterModal";
 import DiscordModal from "./DiscordModal";
 
+const LoadingOverlay = ({ isVisible, message }) => {
+  if (!isVisible) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 backdrop-blur-sm">
+      <div className="bg-white p-10 rounded-2xl shadow-2xl text-center min-w-80 max-w-md border border-white border-opacity-20">
+        <div className="w-12 h-12 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin mx-auto mb-6"></div>
+        <div className="text-lg text-gray-800 font-semibold leading-relaxed">
+          {message}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 
 
 const GameButton = ({ children, onClick, className = "", variant = "primary" }) => {
@@ -464,150 +479,68 @@ const Community = () => {
   const [callbackHandled, setCallbackHandled] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [toast, setToast] = useState({ show: false, message: '', type: 'info' });
-   const [loadingManager, setLoadingManager] = useState(null);
+  
+const [loadingState, setLoadingState] = useState({
+    isVisible: false,
+    message: 'Please wait...',
+    activeLoaders: new Map()
+  });
 
-    // LoadingManager class definition
-  class LoadingManager {
-    constructor() {
-      this.activeLoaders = new Map();
-      this.initialized = false;
+    // Create a ref-based loading manager
+  const loadingManager = useRef({
+    showLoading: (loaderId, message = 'Please wait...') => {
+      console.log('showLoading called:', loaderId, message);
       
-      // Only initialize if we're on the client side
-      if (typeof window !== 'undefined') {
-        this.createLoadingOverlay();
-        this.initialized = true;
-      }
-    }
-
-    createLoadingOverlay() {
-      // Double check we're on client side
-      if (typeof document === 'undefined') return;
-      
-      // Create the loading overlay if it doesn't exist
-      if (!document.getElementById('loading-overlay')) {
-        const overlay = document.createElement('div');
-        overlay.id = 'loading-overlay';
-        overlay.innerHTML = `
-          <div class="loading-backdrop">
-            <div class="loading-content">
-              <div class="loading-spinner"></div>
-              <div class="loading-message" id="loading-message"></div>
-            </div>
-          </div>
-        `;
+      setLoadingState(prevState => {
+        const newActiveLoaders = new Map(prevState.activeLoaders);
+        newActiveLoaders.set(loaderId, message);
         
-        // Add styles
-        const style = document.createElement('style');
-        style.textContent = `
-          #loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            backdrop-filter: blur(2px);
-          }
-          
-          .loading-backdrop {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-          }
-          
-          .loading-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            min-width: 250px;
-            max-width: 400px;
-          }
-          
-          .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-          }
-          
-          .loading-message {
-            font-size: 16px;
-            color: #333;
-            font-weight: 500;
-            line-height: 1.4;
-          }
-          
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-          
-          .loading-overlay.show {
-            display: flex !important;
-          }
-        `;
-        
-        document.head.appendChild(style);
-        document.body.appendChild(overlay);
-      }
-    }
+        return {
+          isVisible: true,
+          message: message,
+          activeLoaders: newActiveLoaders
+        };
+      });
+    },
 
-    showLoading(loaderId, message = 'Please wait...') {
-      if (!this.initialized || typeof document === 'undefined') return;
+    hideLoading: (loaderId) => {
+      console.log('hideLoading called:', loaderId);
       
-      const overlay = document.getElementById('loading-overlay');
-      const messageEl = document.getElementById('loading-message');
-      
-      if (overlay && messageEl) {
-        messageEl.textContent = message;
-        overlay.classList.add('show');
-        this.activeLoaders.set(loaderId, message);
-      }
-    }
-
-    hideLoading(loaderId) {
-      if (!this.initialized || typeof document === 'undefined') return;
-      
-      const overlay = document.getElementById('loading-overlay');
-      
-      if (this.activeLoaders.has(loaderId)) {
-        this.activeLoaders.delete(loaderId);
+      setLoadingState(prevState => {
+        const newActiveLoaders = new Map(prevState.activeLoaders);
+        newActiveLoaders.delete(loaderId);
         
-        if (this.activeLoaders.size === 0 && overlay) {
-          overlay.classList.remove('show');
+        const stillHasLoaders = newActiveLoaders.size > 0;
+        const latestMessage = stillHasLoaders ? 
+          Array.from(newActiveLoaders.values()).pop() : 
+          'Please wait...';
+        
+        return {
+          isVisible: stillHasLoaders,
+          message: latestMessage,
+          activeLoaders: newActiveLoaders
+        };
+      });
+    },
+
+    updateMessage: (loaderId, message) => {
+      console.log('updateMessage called:', loaderId, message);
+      
+      setLoadingState(prevState => {
+        if (prevState.activeLoaders.has(loaderId)) {
+          const newActiveLoaders = new Map(prevState.activeLoaders);
+          newActiveLoaders.set(loaderId, message);
+          
+          return {
+            ...prevState,
+            message: message,
+            activeLoaders: newActiveLoaders
+          };
         }
-      }
+        return prevState;
+      });
     }
-
-    updateMessage(loaderId, message) {
-      if (!this.initialized || typeof document === 'undefined') return;
-      
-      if (this.activeLoaders.has(loaderId)) {
-        const messageEl = document.getElementById('loading-message');
-        if (messageEl) {
-          messageEl.textContent = message;
-          this.activeLoaders.set(loaderId, message);
-        }
-      }
-    }
-  }
-
-  // Initialize LoadingManager on component mount (client-side only)
-  useEffect(() => {
-    const manager = new LoadingManager();
-    setLoadingManager(manager);
-  }, []);
+  });
 
   // Twitter modal state
 const [twitterModal, setTwitterModal] = useState({
@@ -1873,76 +1806,81 @@ const updateDiscordFollowStatus = async (username, currentPoints = 0) => {
 
 
 // 9 Convert handleDailyCheckin to use API route
- const handleDailyCheckin = async () => {
-    if (!loadingManager) return; // Guard against server-side execution or uninitialized manager
+const handleDailyCheckin = async () => {
+  const loaderId = 'daily-checkin';
+  const manager = loadingManager.current; // Access the ref-based manager
+  
+  try {
+    manager.showLoading(loaderId, 'Doing check-in, please wait... ⏳');
     
-    const loaderId = 'daily-checkin';
+    const username = getUsernameFromSession();
+    console.log('Handling daily check-in for user:', username);
     
-    try {
-      loadingManager.showLoading(loaderId, 'Doing check-in, please wait... ⏳');
+    if (!username) {
+      manager.hideLoading(loaderId);
+      showPointsBadge(0, `Connect with X or Discord to earn Points!!!`);
+      showToast("Connect with X or Discord to earn Points!!!", "error");
+      return;
+    }
+
+    manager.updateMessage(loaderId, 'Connecting to server... 🌐');
+
+    const response = await fetch('/api/daily-checkin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username })
+    });
+
+    manager.updateMessage(loaderId, 'Processing your check-in... ⚡');
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      manager.hideLoading(loaderId);
       
-      const username = getUsernameFromSession();
-      console.log('Handling daily check-in for user:', username);
-      
-      if (!username) {
-        loadingManager.hideLoading(loaderId);
-        showPointsBadge(0, `Connect with X or Discord to earn Points!!!`);
-        showToast("Connect with X or Discord to earn Points!!!", "error");
+      if (data.alreadyCheckedIn) {
+        showToast(data.message, "info");
+        showPointsBadge(0, data.message);
         return;
       }
+      throw new Error(data.error || 'Failed to complete daily check-in');
+    }
 
-      loadingManager.updateMessage(loaderId, 'Connecting to server... 🌐');
+    // Handle successful response
+    if (data.alreadyCheckedIn) {
+      manager.hideLoading(loaderId);
+      showPointsBadge(0, data.message);
+      showToast(data.message, "info");
+      return;
+    }
 
-      const response = await fetch('/api/daily-checkin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username })
-      });
-
-      loadingManager.updateMessage(loaderId, 'Processing your check-in... ⚡');
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        loadingManager.hideLoading(loaderId);
-        
-        if (data.alreadyCheckedIn) {
-          showToast(data.message, "info");
-          showPointsBadge(0, data.message);
-          return;
-        }
-        throw new Error(data.error || 'Failed to complete daily check-in');
-      }
-
-      if (response.ok) {
-        if (data.alreadyCheckedIn) {
-          loadingManager.hideLoading(loaderId);
-          showPointsBadge(0, data.message);
-          return;
-        }
-
-        if (data.success) {
-          loadingManager.updateMessage(loaderId, 'Check-in successful! 🎉');
-          
-          setTimeout(() => {
-            loadingManager.hideLoading(loaderId);
-            showPointsBadge(data.points, `Daily Check-in Complete! 🔥 ${data.streak} day streak!`);
-          }, 800);
-        }
-      }
+    if (data.success) {
+      manager.updateMessage(loaderId, 'Check-in successful! 🎉');
+      
+      setTimeout(() => {
+        manager.hideLoading(loaderId);
+        showPointsBadge(data.points, `Daily Check-in Complete! 🔥 ${data.streak} day streak!`);
+      }, 800);
       
       showToast(`+${data.points} points earned! ${data.streak} day streak!`, "success");
-
-    } catch (error) {
-      console.error('Error during daily checkin:', error);
-      if (loadingManager) {
-        loadingManager.hideLoading(loaderId);
-      }
-      showToast("An unexpected error occurred during check-in", "error");
     }
-  };
+
+  } catch (error) {
+    console.error('Error during daily checkin:', error);
+    manager.hideLoading(loaderId);
+    
+    // Handle specific error types
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      showToast("Network error - please check your connection", "error");
+    } else if (error.message.includes('Failed to fetch')) {
+      showToast("Unable to connect to server", "error");
+    } else {
+      showToast(error.message || "An unexpected error occurred during check-in", "error");
+    }
+  }
+};
 
 
 
