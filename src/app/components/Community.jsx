@@ -1546,6 +1546,7 @@ const handleTwitterConnect = async () => {
   }
   else {
     // Start OAuth flow for new users via NextAuth
+    //we can start the Twitter OAuth flow
     try {
         console.error(' Start OAuth flow for new users');
          // Set flag to indicate OAuth is in progress
