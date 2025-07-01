@@ -19,6 +19,129 @@ import CelebrationPopup from "./CelebrationPopup";
 import TwitterModal from "./TwitterModal";
 import DiscordModal from "./DiscordModal";
 
+class LoadingManager {
+  constructor() {
+    this.activeLoaders = new Map();
+    this.createLoadingOverlay();
+  }
+
+  createLoadingOverlay() {
+    if (!document.getElementById('loading-overlay')) {
+      const overlay = document.createElement('div');
+      overlay.id = 'loading-overlay';
+      overlay.innerHTML = `
+        <div class="loading-backdrop">
+          <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-message" id="loading-message"></div>
+          </div>
+        </div>
+      `;
+      
+      // Add styles
+      const style = document.createElement('style');
+      style.textContent = `
+        #loading-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: none;
+          justify-content: center;
+          align-items: center;
+          z-index: 9999;
+          backdrop-filter: blur(2px);
+        }
+        
+        .loading-backdrop {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+        }
+        
+        .loading-content {
+          background: white;
+          padding: 2rem;
+          border-radius: 12px;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+          text-align: center;
+          min-width: 250px;
+          max-width: 400px;
+        }
+        
+        .loading-spinner {
+          width: 40px;
+          height: 40px;
+          border: 4px solid #f3f3f3;
+          border-top: 4px solid #3498db;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin: 0 auto 1rem;
+        }
+        
+        .loading-message {
+          font-size: 16px;
+          color: #333;
+          font-weight: 500;
+          line-height: 1.4;
+        }
+        
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        
+        .loading-overlay.show {
+          display: flex !important;
+        }
+      `;
+      
+      document.head.appendChild(style);
+      document.body.appendChild(overlay);
+    }
+  }
+
+  showLoading(loaderId, message = 'Please wait...') {
+    const overlay = document.getElementById('loading-overlay');
+    const messageEl = document.getElementById('loading-message');
+    
+    if (overlay && messageEl) {
+      messageEl.textContent = message;
+      overlay.classList.add('show');
+      this.activeLoaders.set(loaderId, message);
+    }
+  }
+
+  hideLoading(loaderId) {
+    const overlay = document.getElementById('loading-overlay');
+    
+    if (this.activeLoaders.has(loaderId)) {
+      this.activeLoaders.delete(loaderId);
+      
+      if (this.activeLoaders.size === 0 && overlay) {
+        overlay.classList.remove('show');
+      }
+    }
+  }
+
+  updateMessage(loaderId, message) {
+    if (this.activeLoaders.has(loaderId)) {
+      const messageEl = document.getElementById('loading-message');
+      if (messageEl) {
+        messageEl.textContent = message;
+        this.activeLoaders.set(loaderId, message);
+      }
+    }
+  }
+}
+
+// Create global instance
+const loadingManager = new LoadingManager();
+
 const GameButton = ({ children, onClick, className = "", variant = "primary" }) => {
   const baseClasses = "relative overflow-hidden font-bold py-3 px-6 rounded-lg transform transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg skew-x-[-10deg] hover:skew-x-[-5deg]";
   
@@ -1728,30 +1851,38 @@ const updateDiscordFollowStatus = async (username, currentPoints = 0) => {
 
 // 9 Convert handleDailyCheckin to use API route
 const handleDailyCheckin = async () => {
+  const loaderId = 'daily-checkin';
+  
   try {
-    // Get current user (you'll need to implement this based on your auth system)
-    const username = getUsernameFromSession(); // Replace with your actual user retrieval method
+    loadingManager.showLoading(loaderId, 'Doing check-in, please wait... ⏳');
+    
+    const username = getUsernameFromSession();
     console.log('Handling daily check-in for user:', username);
     
     if (!username) {
+      loadingManager.hideLoading(loaderId);
       showPointsBadge(0, `Connect with X or Discord to earn Points!!!`);
       showToast("Connect with X or Discord to earn Points!!!", "error");
       return;
     }
+
+    loadingManager.updateMessage(loaderId, 'Connecting to server... 🌐');
 
     const response = await fetch('/api/daily-checkin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        username
-      })
+      body: JSON.stringify({ username })
     });
+
+    loadingManager.updateMessage(loaderId, 'Processing your check-in... ⚡');
 
     const data = await response.json();
 
     if (!response.ok) {
+      loadingManager.hideLoading(loaderId);
+      
       if (data.alreadyCheckedIn) {
         showToast(data.message, "info");
         showPointsBadge(0, data.message);
@@ -1760,26 +1891,28 @@ const handleDailyCheckin = async () => {
       throw new Error(data.error || 'Failed to complete daily check-in');
     }
 
-    if(response.ok){
-      if(data.alreadyCheckedIn) {
-       // showToast(data.message, "info");
+    if (response.ok) {
+      if (data.alreadyCheckedIn) {
+        loadingManager.hideLoading(loaderId);
         showPointsBadge(0, data.message);
         return;
       }
 
-      if(data.success){
-        // Success! Show the points badge animation
-    showPointsBadge(data.points, `Daily Check-in Complete! 🔥 ${data.streak} day streak!`);
-    
+      if (data.success) {
+        loadingManager.updateMessage(loaderId, 'Check-in successful! 🎉');
+        
+        setTimeout(() => {
+          loadingManager.hideLoading(loaderId);
+          showPointsBadge(data.points, `Daily Check-in Complete! 🔥 ${data.streak} day streak!`);
+        }, 800);
       }
     }
-
     
-    // Optional: Show success toast
     showToast(`+${data.points} points earned! ${data.streak} day streak!`, "success");
 
   } catch (error) {
     console.error('Error during daily checkin:', error);
+    loadingManager.hideLoading(loaderId);
     showToast("An unexpected error occurred during check-in", "error");
   }
 };
