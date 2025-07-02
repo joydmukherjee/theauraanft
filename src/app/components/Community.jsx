@@ -122,7 +122,7 @@ const PostModal = ({ isOpen, onClose, onSubmit, session }) => {
   };
 
   const getUserImageFromSession = () => {
-     return session?.user?.image || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400'; // Default avatar
+     return session?.user?.image || 'https://xdptamjutlybykgxmoyt.supabase.co/storage/v1/object/public/auraimage//Aura_purple.png'; // Default avatar
   };
 
   const [formData, setFormData] = useState({
@@ -756,9 +756,9 @@ const getUserImageFromSession = () => {
 // Updated useEffect with proper callback detection and prevention of infinite loop
  // Universal session handler for both Twitter and Discord
   useEffect(() => {
-    console.log("=== Universal Session Handler ===");
-    console.log("Session status:", status);
-    console.log("Callback handled:", callbackHandled);
+    // console.log("=== Universal Session Handler ===");
+    // console.log("Session status:", status);
+    // console.log("Callback handled:", callbackHandled);
 
     if (status === "loading") return;
     if (!session || callbackHandled) return;
@@ -768,7 +768,7 @@ const getUserImageFromSession = () => {
       const avatar= getUserImageFromSession();
       const provider = session.provider;
       
-      console.log("Processing session for:", { username, provider });
+      //console.log("Processing session for:", { username, provider });
 
       if (!username || !provider) return;
 
@@ -781,7 +781,7 @@ const getUserImageFromSession = () => {
         
         const isCallback = hasOAuthCode || justCompletedOAuth;
         
-        console.log("Is callback:", isCallback, "Provider:", provider);
+      //  console.log("Is callback:", isCallback, "Provider:", provider);
 
         if (isCallback) {
           setCallbackHandled(true);
@@ -813,9 +813,9 @@ const getUserImageFromSession = () => {
 // Replace your existing useEffect for handling URL parameters with this fixed version:
 //manual oauth for discord
 useEffect(() => {
-  console.log('=== URL Parameter Handler ===');
-  console.log('Current URL:', window.location.href);
-  console.log('Hash:', window.location.hash);
+ // console.log('=== URL Parameter Handler ===');
+ // console.log('Current URL:', window.location.href);
+ // console.log('Hash:', window.location.hash);
   
   // Parse parameters from hash fragment instead of search params
   const hash = window.location.hash;
@@ -825,14 +825,14 @@ useEffect(() => {
     // Extract the query string part from the hash
     const queryString = hash.split('?')[1];
     params = new URLSearchParams(queryString);
-    console.log('Hash query string:', queryString);
+  //  console.log('Hash query string:', queryString);
   } else {
     // Fallback to regular search params (shouldn't happen with your setup)
     params = new URLSearchParams(window.location.search);
-    console.log('Using search params as fallback');
+   // console.log('Using search params as fallback');
   }
   
-  console.log('All parsed params:', Object.fromEntries(params.entries()));
+ // console.log('All parsed params:', Object.fromEntries(params.entries()));
   
   // Handle Discord OAuth success
   const discordSuccess = params.get('discord_success');
@@ -851,7 +851,7 @@ useEffect(() => {
     handleDiscordOAuthSuccess(discordUsername, discordId);
     
     // Clean URL immediately - remove the query params from hash
-    console.log('Cleaning URL...');
+  //  console.log('Cleaning URL...');
     const cleanHash = hash.split('?')[0]; // Keep only the route part of the hash
     window.history.replaceState({}, document.title, window.location.pathname + cleanHash);
     
@@ -874,16 +874,16 @@ useEffect(() => {
     console.log('No Discord OAuth to process');
     console.log('Reasons:');
     console.log('- discordSuccess:', discordSuccess);
-    console.log('- discordUsername:', discordUsername);
-    console.log('- oauth_in_progress flag:', sessionStorage.getItem('discord_oauth_in_progress'));
+  //  console.log('- discordUsername:', discordUsername);
+  //  console.log('- oauth_in_progress flag:', sessionStorage.getItem('discord_oauth_in_progress'));
   }
 }, []);
 
 // this is for the callback handler for twitter manual oAuth
 useEffect(() => {
-  console.log('=== URL Parameter Handler ===');
-  console.log('Current URL:', window.location.href);
-  console.log('Hash:', window.location.hash);
+  // console.log('=== URL Parameter Handler ===');
+  // console.log('Current URL:', window.location.href);
+  // console.log('Hash:', window.location.hash);
   
   // Parse parameters from hash fragment instead of search params
   const hash = window.location.hash;
@@ -893,7 +893,7 @@ useEffect(() => {
     // Extract the query string part from the hash
     const queryString = hash.split('?')[1];
     params = new URLSearchParams(queryString);
-    console.log('Hash query string:', queryString);
+   // console.log('Hash query string:', queryString);
   } else {
     // Fallback to regular search params (shouldn't happen with your setup)
     params = new URLSearchParams(window.location.search);
@@ -906,11 +906,11 @@ useEffect(() => {
 const twitterUsername = params.get('twitter_username');
 const twitterId = params.get('twitter_id');
 const twitterError = params.get('twitter_error');
-console.log('Twitter success:', twitterSuccess);
-  console.log('Twitter username:', twitterUsername);
-  console.log('Twitter ID:', twitterId);
-  console.log('Twitter error:', twitterError);
-  console.log('OAuth in progress flag:', sessionStorage.getItem('twitter_oauth_in_progress'));
+// console.log('Twitter success:', twitterSuccess);
+//   console.log('Twitter username:', twitterUsername);
+//   console.log('Twitter ID:', twitterId);
+//   console.log('Twitter error:', twitterError);
+//   console.log('OAuth in progress flag:', sessionStorage.getItem('twitter_oauth_in_progress'));
 
 if (twitterSuccess && twitterUsername && sessionStorage.getItem('twitter_oauth_in_progress')) {
   // Link Twitter username to the current user in Supabase
