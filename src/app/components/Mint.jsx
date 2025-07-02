@@ -19,11 +19,13 @@ import {
 import { Metadata } from "@metaplex-foundation/mpl-token-metadata";
 import { Metaplex, walletAdapterIdentity } from "@metaplex-foundation/js";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { motion } from "framer-motion";
 import { fadeIn, textVariant } from "../utils/motion";
 import { styles } from "../styles";
 import * as anchor from "@project-serum/anchor";
 import ReverseTimer from "./ReverseTimer";
+
 const Mint = () => {
   const wallet = useWallet();
 
@@ -89,7 +91,6 @@ const Mint = () => {
     //wallet not connected?
     if (!wallet.connected) {
       setDisableMint(true);
-
       return;
     }
 
@@ -336,9 +337,38 @@ const Mint = () => {
     setDisableMint(false);
   };
 
-  // show and do nothing if no wallet is connected
+  // Show wallet connection prompt if wallet is not connected
   if (!wallet.connected) {
-    return null;
+    return (
+      <>
+        <motion.div variants={textVariant()}>
+          <h2 className={styles.sectionHeadText}>Mint.</h2>
+        </motion.div>
+        <div className="flex flex-col items-center justify-center h-[800px] bg-gradient-to-r from-customColor1 to-customColor2 text-white">
+          <div className="text-center mb-8">
+            <h2 className="text-4xl font-bold mb-4">🔗 Connect Your Wallet</h2>
+            <p className="text-xl mb-6 text-gray-200">
+              To mint your NFT, please connect your Solana wallet first
+            </p>
+            <div className="flex justify-center mb-4">
+              <WalletMultiButton className="!bg-gradient-to-r !from-blue-500 !to-indigo-500 hover:!from-indigo-500 hover:!to-blue-500 !text-white !font-semibold !py-3 !px-6 !border !border-transparent !rounded-lg !shadow-lg !transform !transition !duration-300 hover:!scale-105" />
+            </div>
+            <p className="text-sm text-gray-300 mt-4">
+              {wallet.connecting ? "Connecting..." : "Supported wallets: Phantom, Solflare, and more"}
+            </p>
+          </div>
+          
+          {/* Optional: Add some visual elements */}
+          <div className="mt-8 text-center">
+            <div className="inline-flex items-center space-x-2 text-gray-300">
+              <span>💎</span>
+              <span className="text-lg">Exclusive AURA NFTs</span>
+              <span>💎</span>
+            </div>
+          </div>
+        </div>
+      </>
+    );
   }
 
   // if it's the first time we are processing this function with a connected wallet we read the CM data and add Listeners
@@ -350,6 +380,7 @@ const Mint = () => {
       addListener();
     })();
   }
+
   const getMetadata = async (mint) => {
     return (
       await anchor.web3.PublicKey.findProgramAddress(
@@ -362,6 +393,7 @@ const Mint = () => {
       )
     )[0];
   };
+
   const onClick = async () => {
     setIsMinting(true);
     setShowError(undefined);
@@ -455,10 +487,10 @@ const Mint = () => {
       setIsMinting(false);
     }
   };
+
   return (
     <>
       <motion.div variants={textVariant()}>
-        {/* <p className={styles.sectionSubText}>Introduction</p> */}
         <h2 className={styles.sectionHeadText}>Mint.</h2>
       </motion.div>
       {showTimer === true && <ReverseTimer className="text-white" />}
@@ -487,7 +519,7 @@ const Mint = () => {
               <div className="flex flex-row rounded-lg items-center justify-center border-2 mt-[15px] ml-2 mr-2 border-transparent p-[15px]">
                 <div className="flex flex-col items-center justify-center">
                   <h3 className="text-xl font-bold font-mono italic mb-2">
-                    Yayy!! Welcome to OCTO family!
+                    Yayy!! Welcome to AURA family!
                   </h3>
                   <img
                     className="h-[300px] w-[300px]"
@@ -508,7 +540,7 @@ const Mint = () => {
               <div className="flex flex-row rounded-lg items-center justify-center border-2 mt-[15px] ml-2 mr-2 border-transparent p-[15px]">
                 <div className="flex flex-col items-center justify-center">
                   <h3 className="text-xl font-bold font-mono italic mb-2">
-                    Yayy!! Welcome to OCTO family!
+                    Yayy!! Welcome to AURA family!
                   </h3>
                   <img
                     className="h-[300px] w-[300px]"

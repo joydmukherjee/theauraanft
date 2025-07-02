@@ -6,7 +6,7 @@ import Link from "next/link";
 import { SectionWrapper } from "../hoc";
 import { fadeIn, textVariant } from "../utils/motion";
 import { testimonials } from "../constants";
-//import { Link } from "react-router-dom";
+
 const FeedbackCard = ({
   index,
   testimonial,
@@ -37,6 +37,18 @@ const FeedbackCard = ({
       <div className="mt-5">
         <h3 className="text-white font-bold text-[24px]">{name}</h3>
         <p className="mt-2 text-slate-500 text-[14px]">{designation}</p>
+        
+        {/* Replace company text with clickable X logo */}
+        <div className="mt-2">
+          <a 
+            href={company} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-block hover:opacity-80 transition-opacity duration-200"
+          >
+            <span className="text-2xl md:text-6xl">𝕏</span>
+          </a>
+        </div>
       </div>
     </Tilt>
   </motion.div>
