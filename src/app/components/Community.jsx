@@ -2145,20 +2145,7 @@ return (
           </div>
         </div>
 
-        {/* Test Buttons Panel */}
-        {/* <div className="flex justify-center gap-4 mb-12">
-          <div className="bg-white p-2 rounded-xl border-4 border-black shadow-xl">
-            <SignOutButton/>
-          </div>
-          <div className="bg-white p-2 rounded-xl border-4 border-black shadow-xl">
-            <button 
-              onClick={testCelebration}
-              className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-lg border-4 border-black font-comic font-bold shadow-lg hover:scale-105 transition-transform"
-            >
-              🎉 TEST CELEBRATION
-            </button>
-          </div>
-        </div> */}
+
 
      {/* Game Action Cards - Comic Book Style */}
       <div className="max-w-6xl mx-auto md:px-4 space-y-12">
