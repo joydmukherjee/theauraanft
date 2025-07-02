@@ -208,26 +208,26 @@ const experiences = [
 const testimonials = [
   {
     testimonial:
-      "I thought it was impossible to make a website as beautiful as our product, but Rick proved me wrong.",
-    name: "Infinix",
-    designation: "Technical Overlord",
-    company: "Acme Co",
-    image: "/Infinix1.png",
-  },
-  {
-    testimonial:
       "After Rick optimized our website, our traffic increased by 50%. We can't thank them enough!",
     name: "Celeste",
     designation: "Management Queen",
-    company: "456 Enterprises",
+    company: "https://x.com/CelesteWAO",
     image: "/GS1.png",
+  },
+  {
+    testimonial:
+      "I thought it was impossible to make a website as beautiful as our product, but Rick proved me wrong.",
+    name: "Infinix",
+    designation: "Technical Overlord",
+    company: "https://x.com/OverlordInfinix",
+    image: "/Infinix1.png",
   },
   {
     testimonial:
       "I've never met a web developer who truly cares about their clients' success like Rick does.",
     name: "Golden Sparrow",
     designation: "Designer Diva",
-    company: "DEF Corp",
+    company: "https://x.com/GoldenSpar52269",
     image: "/Celeste1.png",
   },
   

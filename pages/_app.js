@@ -44,31 +44,7 @@ const App = ({ Component, pageProps }) => {
         [network]
     );
 
-//      // Create Supabase client once per app lifecycle
-//     const [supabaseClient, setSupabaseClient] = useState(null);
-//   const [mounted, setMounted] = useState(false);
 
-//  useEffect(() => {
-//     setMounted(true);
-//     if (typeof window !== 'undefined') {
-//       const client = createPagesBrowserClient({
-//         supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-//         supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-//         cookieOptions: {
-//           name: 'sb-auth-token',
-//           domain: window.location.hostname,
-//           maxAge: 60 * 60 * 24 * 365,
-//           path: '/',
-//           sameSite: 'lax',
-//           secure: process.env.NODE_ENV === 'production'
-//         }
-//       });
-//       setSupabaseClient(client);
-//     }
-//   }, []);
-
-//   // 3. Render nothing during SSR
-//   if (!mounted) return null;
     return (
         <>
          <Head>
@@ -77,11 +53,7 @@ const App = ({ Component, pageProps }) => {
         <link rel="icon" href="/Aura_purple.png" /> {/* Replace with your logo file name and extension */}
       </Head>
       <SessionProvider session={pageProps.session}>
-         {/* Supabase Session Provider */}
-                {/* <SessionContextProvider
-                    supabaseClient={supabaseClient}
-                    initialSession={pageProps.initialSession}
-                > */}
+         
                     <ConnectionProvider endpoint={endpoint}>
                         <WalletProvider wallets={wallets} autoConnect>
                             <WalletModalProvider>
@@ -93,7 +65,7 @@ const App = ({ Component, pageProps }) => {
                             </WalletModalProvider>
                         </WalletProvider>
                     </ConnectionProvider>
-                {/* </SessionContextProvider> */}
+               
       </SessionProvider>
        
         </>
