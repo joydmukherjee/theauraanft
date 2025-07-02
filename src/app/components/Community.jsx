@@ -2146,7 +2146,7 @@ return (
         </div>
 
         {/* Test Buttons Panel */}
-        <div className="flex justify-center gap-4 mb-12">
+        {/* <div className="flex justify-center gap-4 mb-12">
           <div className="bg-white p-2 rounded-xl border-4 border-black shadow-xl">
             <SignOutButton/>
           </div>
@@ -2158,7 +2158,7 @@ return (
               🎉 TEST CELEBRATION
             </button>
           </div>
-        </div>
+        </div> */}
 
      {/* Game Action Cards - Comic Book Style */}
       <div className="max-w-6xl mx-auto md:px-4 space-y-12">
