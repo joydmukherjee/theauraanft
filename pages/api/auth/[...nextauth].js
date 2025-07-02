@@ -13,6 +13,14 @@ export const authOptions = {
       version: "2.0", // opt-in to Twitter OAuth 2.0
     })
   ],
+   session: {
+    strategy: "jwt", // ensure you're using JWT-based sessions
+    maxAge: 60 * 60 * 24 * 365, // 1 year in seconds
+  },
+
+  jwt: {
+    maxAge: 60 * 60 * 24 * 365, // 1 year in seconds
+  },
   callbacks: {
     async jwt({ token, account, profile }) {
       console.log('Existing token:', token)
