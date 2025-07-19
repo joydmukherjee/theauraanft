@@ -153,12 +153,12 @@ useEffect(() => {
       ease: "power2.out"
     });
 
-    // 🎯 MINIMAL MOVEMENT - BARELY NOTICEABLE FOR BOTH PANELS
-    // Very subtle breathing effect for left panel - SAME AS RIGHT
+    // 🎯 ULTRA MINIMAL MOVEMENT - BARELY NOTICEABLE (FIXED VALUES)
+    // Very subtle breathing effect for left panel
     gsap.to(leftPanelRef.current, {
-      y: -0.5, // 🎯 EXTREMELY SUBTLE
-      rotation: 0.1, // 🎯 BARELY VISIBLE
-      duration: 10, // 🎯 VERY SLOW - SAME AS RIGHT
+      y: -0.5, // 🎯 EXTREMELY SUBTLE - CORRECT VALUE
+      rotation: 0.1, // 🎯 BARELY VISIBLE - CORRECT VALUE
+      duration: 20, // 🎯 VERY SLOW
       ease: "sine.inOut",
       yoyo: true,
       repeat: -1,
@@ -166,32 +166,23 @@ useEffect(() => {
     });
 
     gsap.to(rightPanelRef.current, {
-      y: -0.5, // 🎯 EXTREMELY SUBTLE
-      rotation: -0.1, // 🎯 BARELY VISIBLE
-      duration: 10, // 🎯 VERY SLOW
+      y: -0.5, // 🎯 EXTREMELY SUBTLE - CORRECT VALUE
+      rotation: -0.1, // 🎯 BARELY VISIBLE - CORRECT VALUE  
+      duration: 15, // 🎯 VERY SLOW
       ease: "sine.inOut",
       yoyo: true,
       repeat: -1,
       delay: 2
     });
 
-    // Remove additional right panel movement entirely
-    // (commented out the x-axis movement)
-
-    // Remove title text color animation entirely
-    // (commented out the color animation)
-
-    // Remove speech bubble wiggle entirely
-    // (commented out the speech bubble rotation)
-
     // Button hover animations - FASTER AND MORE SUBTLE
     buttonsRef.current.forEach((button) => {
       if (button) {
         button.addEventListener('mouseenter', () => {
           gsap.to(button, {
-            scale: 1.05, // 🎯 MORE SUBTLE (was 1.1)
-            rotation: 1, // 🎯 MORE SUBTLE (was 2)
-            duration: 0.2, // ⚡ FASTER (was 0.3)
+            scale: 1.05, // 🎯 MORE SUBTLE
+            rotation: 1, // 🎯 MORE SUBTLE
+            duration: 0.2, // ⚡ FASTER
             ease: "power2.out"
           });
         });
@@ -200,7 +191,7 @@ useEffect(() => {
           gsap.to(button, {
             scale: 1,
             rotation: 0,
-            duration: 0.2, // ⚡ FASTER (was 0.3)
+            duration: 0.2, // ⚡ FASTER
             ease: "power2.out"
           });
         });
