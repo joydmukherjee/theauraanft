@@ -10,7 +10,8 @@ const Player = dynamic(
 );
 
 const Octos = ({ isMobile, onModelLoaded }) => {
-  const { scene } = useGLTF("./high_quality_octopus/Aurav4.glb");
+  // Only load the model on desktop - skip entirely on mobile
+  const { scene } = !isMobile ? useGLTF("./high_quality_octopus/Aurav4.glb") : { scene: null };
   const octocasaRef = useRef();
 
   useEffect(() => {
@@ -18,6 +19,11 @@ const Octos = ({ isMobile, onModelLoaded }) => {
       onModelLoaded(); // Notify the parent that the model is loaded
     }
   }, [scene, onModelLoaded]);
+
+  // Don't render anything on mobile
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <group rotation={[0, 20, 0]}>
@@ -32,8 +38,8 @@ const Octos = ({ isMobile, onModelLoaded }) => {
       />
       <primitive
         object={scene}
-        position={isMobile ? [-0.5, -1, 0] : [-1, -1.5, 0]}
-        scale={isMobile ? 0.35 : 0.5}
+        position={[-1, -1.5, 0]}
+        scale={0.5}
         ref={octocasaRef}
         frustumCulled={false}
       />
@@ -42,7 +48,8 @@ const Octos = ({ isMobile, onModelLoaded }) => {
 };
 
 const OctosCanvas = ({ isMuted }) => {
-  const [isMobile, setIsMobile] = useState(false);
+  // Start with null to prevent hydration mismatch
+  const [isMobile, setIsMobile] = useState(null);
   const [modelLoaded, setModelLoaded] = useState(false); // Track if the model is loaded
   const [videoFinishedOnce, setVideoFinishedOnce] = useState(false); // Track if the video finished once
   const [videoPlaying, setVideoPlaying] = useState(false); // Track if the video is playing
@@ -50,6 +57,7 @@ const OctosCanvas = ({ isMuted }) => {
   const videoRef = useRef(null);
   const cameraRef = useRef();
   const controlsRef = useRef();
+
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 500px)");
     setIsMobile(mediaQuery.matches);
@@ -59,9 +67,19 @@ const OctosCanvas = ({ isMuted }) => {
       mediaQuery.removeEventListener("change", handleMediaQueryChange);
   }, []);
 
+  // Mobile-specific effect: Skip model loading and keep video playing
+  useEffect(() => {
+    if (isMobile) {
+      setModelLoaded(true); // Pretend model is loaded on mobile
+      setVideoFinishedOnce(false); // Keep video playing
+    }
+  }, [isMobile]);
+
   const handleModelLoaded = () => {
-    setModelLoaded(true); // Mark the model as loaded
-    console.log("Model loaded");
+    if (!isMobile) { // Only set model loaded on desktop
+      setModelLoaded(true); // Mark the model as loaded
+      console.log("Model loaded");
+    }
   };
 
   const handleVideoCanPlay = () => {
@@ -70,27 +88,35 @@ const OctosCanvas = ({ isMuted }) => {
       .play()
       .catch((error) => console.error("Video play failed:", error));
   };
+
   const handleVideoPlay = () => {
     setIsLoading(false); // Hide loading animation when video starts playing
     console.log("Video is playing");
   };
 
   const handleVideoEnded = () => {
-    if (modelLoaded) {
-      setVideoFinishedOnce(true); // Mark that the video has finished once
-      console.log("Video finished, model loaded");
-    } else {
-      // If the model is not yet loaded, restart the video
+    if (isMobile) {
+      // On mobile, always loop the video
       videoRef.current.play();
-      console.log("Video looping, waiting for model to load");
+      console.log("Mobile: Video looping continuously");
+    } else {
+      // Desktop behavior remains the same
+      if (modelLoaded) {
+        setVideoFinishedOnce(true); // Mark that the video has finished once
+        console.log("Desktop: Video finished, model loaded");
+      } else {
+        // If the model is not yet loaded, restart the video
+        videoRef.current.play();
+        console.log("Desktop: Video looping, waiting for model to load");
+      }
     }
   };
 
   useEffect(() => {
-    if (modelLoaded && videoFinishedOnce) {
-      console.log("Both video finished and model loaded, showing canvas");
+    if (modelLoaded && videoFinishedOnce && !isMobile) {
+      console.log("Desktop: Both video finished and model loaded, showing canvas");
     }
-  }, [modelLoaded, videoFinishedOnce]);
+  }, [modelLoaded, videoFinishedOnce, isMobile]);
 
   // Update the video sound based on isMuted
   useEffect(() => {
@@ -104,8 +130,8 @@ const OctosCanvas = ({ isMuted }) => {
       id="model-section"
       className="relative w-full h-screen overflow-hidden"
     >
-      {/* Loading animation until the video starts playing */}
-      {isLoading && (
+      {/* Loading animation until the video starts playing OR while detecting viewport */}
+      {(isLoading || isMobile === null) && (
         <div
           id="loadingScreen"
           className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50"
@@ -124,8 +150,8 @@ const OctosCanvas = ({ isMuted }) => {
         </div>
       )}
 
-      {/* Show video until it finishes and the model is loaded */}
-      {(!modelLoaded || !videoFinishedOnce) && (
+      {/* Show video until it finishes and the model is loaded (desktop) or always show on mobile */}
+      {isMobile !== null && (isMobile || (!modelLoaded || !videoFinishedOnce)) && (
         <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center bg-black z-10 sm:pt-0 pt-16">
           <div className="w-full h-full overflow-hidden">
             <video
@@ -134,8 +160,8 @@ const OctosCanvas = ({ isMuted }) => {
               autoPlay
               preload="auto"
               muted={isMuted}
-              loop={false}
-              className="w-full sm:h-full h-[500px]  object-cover sm:object-contain "
+              loop={isMobile} // Enable loop on mobile, disable on desktop
+              className="w-full sm:h-full h-[500px] object-cover sm:object-contain"
               style={{
                 objectPosition: "center 20%", // Adjust this value to change the focus point
               }}
@@ -147,40 +173,42 @@ const OctosCanvas = ({ isMuted }) => {
         </div>
       )}
 
-      {/* Render Canvas but control visibility */}
-      <Canvas
-        frameloop="always"
-        shadows
-        dpr={[1, 2]}
-        camera={{
-          position: [20, -10, 5],
-          fov: 10,
-          near: 0.1,
-          far: 1000,
-          ref: cameraRef,
-        }}
-        gl={{ preserveDrawingBuffer: true }}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "80%",
-          zIndex: modelLoaded && videoFinishedOnce ? 5 : -1, // Hide canvas until both are ready
-          visibility: modelLoaded && videoFinishedOnce ? "visible" : "hidden", // Ensure it's only visible when ready
-        }}
-      >
-        <Suspense fallback={<CanvasLoader />}>
-          <OrbitControls
-            ref={controlsRef}
-            enableZoom={false}
-            maxPolarAngle={Math.PI / 2}
-            minPolarAngle={Math.PI / 2}
-          />
-          <Octos isMobile={isMobile} onModelLoaded={handleModelLoaded} />
-          <Preload all />
-        </Suspense>
-      </Canvas>
+      {/* Render Canvas only on desktop */}
+      {isMobile !== null && !isMobile && (
+        <Canvas
+          frameloop="always"
+          shadows
+          dpr={[1, 2]}
+          camera={{
+            position: [20, -10, 5],
+            fov: 10,
+            near: 0.1,
+            far: 1000,
+            ref: cameraRef,
+          }}
+          gl={{ preserveDrawingBuffer: true }}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "80%",
+            zIndex: modelLoaded && videoFinishedOnce ? 5 : -1, // Hide canvas until both are ready
+            visibility: modelLoaded && videoFinishedOnce ? "visible" : "hidden", // Ensure it's only visible when ready
+          }}
+        >
+          <Suspense fallback={<CanvasLoader />}>
+            <OrbitControls
+              ref={controlsRef}
+              enableZoom={false}
+              maxPolarAngle={Math.PI / 2}
+              minPolarAngle={Math.PI / 2}
+            />
+            <Octos isMobile={isMobile} onModelLoaded={handleModelLoaded} />
+            <Preload all />
+          </Suspense>
+        </Canvas>
+      )}
     </div>
   );
 };

@@ -72,194 +72,164 @@ const Studio = () => {
   const handleModalClose = () => setOpenModal(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Initial setup - hide elements
-      gsap.set([leftPanelRef.current, rightPanelRef.current], { 
-        opacity: 0, 
-        y: 100, 
-        rotation: 5 
-      });
-      gsap.set(titleRef.current, { 
-        scale: 0, 
-        rotation: -10, 
-        transformOrigin: "center center" 
-      });
-      gsap.set(subtitleRef.current, { 
-        x: -200, 
-        opacity: 0, 
-        rotation: 5 
-      });
-      gsap.set(contentSectionsRef.current, { 
-        x: -100, 
-        opacity: 0, 
-        stagger: 0.1 
-      });
-      gsap.set(buttonsRef.current, { 
-        y: 50, 
-        opacity: 0, 
-        scale: 0.8 
-      });
-      gsap.set(speechBubbleRef.current, { 
-        scale: 0, 
-        rotation: 10, 
-        transformOrigin: "bottom left" 
-      });
+  const ctx = gsap.context(() => {
+    // Initial setup - hide elements
+    gsap.set([leftPanelRef.current, rightPanelRef.current], { 
+      opacity: 0, 
+      y: 100, 
+      rotation: 5 
+    });
+    gsap.set(titleRef.current, { 
+      scale: 0, 
+      rotation: -10, 
+      transformOrigin: "center center" 
+    });
+    gsap.set(subtitleRef.current, { 
+      x: -200, 
+      opacity: 0, 
+      rotation: 5 
+    });
+    gsap.set(contentSectionsRef.current, { 
+      x: -100, 
+      opacity: 0, 
+      stagger: 0.1 
+    });
+    gsap.set(buttonsRef.current, { 
+      y: 50, 
+      opacity: 0, 
+      scale: 0.8 
+    });
+    gsap.set(speechBubbleRef.current, { 
+      scale: 0, 
+      rotation: 10, 
+      transformOrigin: "bottom left" 
+    });
 
-      // Main timeline
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          toggleActions: "play none none reverse"
-        }
-      });
+    // ⚡ INSTANT TEXT APPEARANCE - NO STAGGERED ANIMATIONS
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top 80%",
+        end: "bottom 20%",
+        toggleActions: "play none none reverse"
+      }
+    });
 
-      // Panel entrance animations
-      tl.to([leftPanelRef.current, rightPanelRef.current], {
-        opacity: 1,
-        y: 0,
-        rotation: 0,
-        duration: 1.2,
-        ease: "back.out(1.7)",
-        stagger: 0.2
-      })
-      // Title animation with bounce effect
-      .to(titleRef.current, {
-        scale: 1,
-        rotation: 0,
-        duration: 0.8,
-        ease: "bounce.out"
-      }, "-=0.8")
-      // Subtitle slide in
-      .to(subtitleRef.current, {
-        x: 0,
-        opacity: 1,
-        rotation: 0,
-        duration: 0.6,
-        ease: "power2.out"
-      }, "-=0.4")
-      // Content sections staggered entrance
-      .to(contentSectionsRef.current, {
-        x: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "power2.out",
-        stagger: 0.15
-      }, "-=0.3")
-      // Buttons pop in
-      .to(buttonsRef.current, {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 0.4,
-        ease: "back.out(1.7)",
-        stagger: 0.1
-      }, "-=0.2")
-      // Speech bubble pop
-      .to(speechBubbleRef.current, {
-        scale: 1,
-        rotation: 0,
-        duration: 0.5,
-        ease: "back.out(1.7)"
-      }, "-=0.6");
+    // Everything appears at once - no delays or staggers
+    tl.to([
+      leftPanelRef.current, 
+      rightPanelRef.current,
+      titleRef.current,
+      subtitleRef.current,
+      ...contentSectionsRef.current,
+      ...buttonsRef.current,
+      speechBubbleRef.current
+    ], {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      scale: 1,
+      rotation: 0,
+      duration: 0.4, // Single fast animation
+      ease: "power2.out"
+    });
 
-      // Continuous animations
-      // Floating animation for panels
-      gsap.to(leftPanelRef.current, {
-        y: -10,
-        rotation: 1,
-        duration: 3,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1
-      });
+    // 🐌 MUCH SLOWER CONTINUOUS ANIMATIONS
+    // Floating animation for panels - MUCH SLOWER
+    gsap.to(leftPanelRef.current, {
+      y: -10, // Keep same movement amount
+      rotation: 1, // Keep same rotation
+      duration: 18, // 🐌 MUCH SLOWER (was 3)
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: -1
+    });
 
-      gsap.to(rightPanelRef.current, {
-        y: 10,
-        rotation: -1,
-        duration: 3.5,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
-        delay: 1
-      });
+    gsap.to(rightPanelRef.current, {
+      y: 10, // Keep same movement amount
+      rotation: -1, // Keep same rotation
+      duration: 9, // 🐌 MUCH SLOWER (was 3.5)
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: -1,
+      delay: 2 // Slightly longer delay
+    });
 
-      // Title text color animation
-      gsap.to(titleRef.current, {
-        color: "#fbbf24", // yellow-400
-        duration: 2,
-        ease: "power2.inOut",
-        yoyo: true,
-        repeat: -1,
-        delay: 2
-      });
+    // Title text color animation - MUCH SLOWER
+    gsap.to(titleRef.current, {
+      color: "#fbbf24", // yellow-400
+      duration: 6, // 🐌 MUCH SLOWER (was 2)
+      ease: "power2.inOut",
+      yoyo: true,
+      repeat: -1,
+      delay: 3 // Longer delay
+    });
 
-      // Speech bubble wiggle
-      gsap.to(speechBubbleRef.current, {
-        rotation: 2,
-        duration: 1.5,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
-        delay: 3
-      });
+    // Speech bubble wiggle - KEEP ORIGINAL SPEED
+    gsap.to(speechBubbleRef.current, {
+      rotation: 2, // Keep same rotation amount
+      duration: 1.5, // ✅ KEEP ORIGINAL (as requested)
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: -1,
+      delay: 5 // Longer delay
+    });
 
-      // Dots animation for each content section
-      contentSectionsRef.current.forEach((section, index) => {
-        if (section) {
-          const dots = section.querySelectorAll('.comic-dot');
-          gsap.to(dots, {
-            opacity: 0.8,
-            scale: 1.2,
-            duration: 0.5,
-            ease: "power2.inOut",
-            stagger: 0.1,
-            yoyo: true,
-            repeat: -1,
-            delay: index * 0.5
-          });
-        }
-      });
-
-      // Button hover animations
-      buttonsRef.current.forEach((button) => {
-        if (button) {
-          button.addEventListener('mouseenter', () => {
-            gsap.to(button, {
-              scale: 1.1,
-              rotation: 2,
-              duration: 0.3,
-              ease: "power2.out"
-            });
-          });
-          
-          button.addEventListener('mouseleave', () => {
-            gsap.to(button, {
-              scale: 1,
-              rotation: 0,
-              duration: 0.3,
-              ease: "power2.out"
-            });
-          });
-        }
-      });
-
-      // Typing effect for speech bubble
-      const speechText = speechBubbleRef.current?.querySelector('.speech-text');
-      if (speechText) {
-        gsap.to(speechText, {
-          text: "CREATE. COLLABORATE. CONQUER.",
-          duration: 2,
-          ease: "none",
-          delay: 4
+    // Dots animation for each content section - KEEP ORIGINAL SPEED
+    contentSectionsRef.current.forEach((section, index) => {
+      if (section) {
+        const dots = section.querySelectorAll('.comic-dot');
+        gsap.to(dots, {
+          opacity: 0.8,
+          scale: 1.2,
+          duration: 0.5, // ✅ KEEP ORIGINAL (as requested)
+          ease: "power2.inOut",
+          stagger: 0.1, // ✅ KEEP ORIGINAL (as requested)
+          yoyo: true,
+          repeat: -1,
+          delay: index * 0.5 // ✅ KEEP ORIGINAL (as requested)
         });
       }
+    });
 
-    }, containerRef);
+    // Button hover animations - keep responsive
+    buttonsRef.current.forEach((button) => {
+      if (button) {
+        button.addEventListener('mouseenter', () => {
+          gsap.to(button, {
+            scale: 1.1,
+            rotation: 2,
+            duration: 0.3,
+            ease: "power2.out"
+          });
+        });
+        
+        button.addEventListener('mouseleave', () => {
+          gsap.to(button, {
+            scale: 1,
+            rotation: 0,
+            duration: 0.3,
+            ease: "power2.out"
+          });
+        });
+      }
+    });
 
-    return () => ctx.revert();
-  }, []);
+    // Typing effect for speech bubble - keep the typing effect
+    const speechText = speechBubbleRef.current?.querySelector('.speech-text');
+    if (speechText) {
+      gsap.to(speechText, {
+        text: "CREATE. COLLABORATE. CONQUER.",
+        duration: 2, // Keep original typing duration
+        ease: "none",
+        delay: 4 // Keep original delay
+      });
+    }
+
+  }, containerRef);
+
+  return () => ctx.revert();
+}, []);
 
 return (
   <div ref={containerRef} className="relative min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900 p-4 lg:p-8">

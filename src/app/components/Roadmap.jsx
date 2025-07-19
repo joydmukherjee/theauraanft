@@ -16,78 +16,73 @@ const RoadmapCard = ({ experience, index }) => {
   const iconRef = useRef(null);
   const contentRef = useRef(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Set initial state
-      gsap.set(cardRef.current, { 
-        opacity: 0, 
-        y: 100, 
-        rotation: index % 2 === 0 ? 5 : -5,
-        scale: 0.8
-      });
-      gsap.set(iconRef.current, { 
-        scale: 0, 
-        rotation: 180 
-      });
-      gsap.set(contentRef.current, { 
-        x: index % 2 === 0 ? -50 : 50, 
-        opacity: 0 
-      });
+ useEffect(() => {
+  const ctx = gsap.context(() => {
+    // Set initial state - hide elements
+    gsap.set(cardRef.current, { 
+      opacity: 0, 
+      y: 100, 
+      rotation: index % 2 === 0 ? 5 : -5,
+      scale: 0.8
+    });
+    gsap.set(iconRef.current, { 
+      scale: 0, 
+      rotation: 180 
+    });
+    gsap.set(contentRef.current, { 
+      x: index % 2 === 0 ? -50 : 50, 
+      opacity: 0 
+    });
 
-      // Animation timeline
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: cardRef.current,
-          start: "top 85%",
-          end: "bottom 15%",
-          toggleActions: "play none none reverse"
-        }
-      });
+    // ⚡ INSTANT APPEARANCE - NO STAGGERED ANIMATIONS
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: cardRef.current,
+        start: "top 85%",
+        end: "bottom 15%",
+        toggleActions: "play none none reverse"
+      }
+    });
 
-      tl.to(cardRef.current, {
-        opacity: 1,
-        y: 0,
-        rotation: 0,
-        scale: 1,
-        duration: 0.8,
-        ease: "back.out(1.7)"
-      })
-      .to(iconRef.current, {
-        scale: 1,
-        rotation: 0,
-        duration: 0.6,
-        ease: "bounce.out"
-      }, "-=0.4")
-      .to(contentRef.current, {
-        x: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "power2.out"
-      }, "-=0.3");
+    // Everything appears at once - no delays or staggers
+    tl.to([
+      cardRef.current,
+      iconRef.current,
+      contentRef.current
+    ], {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      scale: 1,
+      rotation: 0,
+      duration: 0.4, // Single fast animation
+      ease: "power2.out"
+    });
 
-      // Continuous floating animation
-      gsap.to(cardRef.current, {
-        y: -5,
-        rotation: index % 2 === 0 ? 1 : -1,
-        duration: 3 + (index * 0.2),
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
-        delay: index * 0.5
-      });
+    // 🐌 MUCH SLOWER CONTINUOUS ANIMATIONS
+    // Continuous floating animation - MUCH SLOWER
+    gsap.to(cardRef.current, {
+      y: -5, // Keep same movement amount
+      rotation: index % 2 === 0 ? 1 : -1, // Keep same rotation
+      duration: 8 + (index * 0.5), // 🐌 MUCH SLOWER (was 3 + index * 0.2)
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: -1,
+      delay: index * 1 // Slightly longer delay between cards
+    });
 
-      // Icon rotation animation
-      gsap.to(iconRef.current, {
-        rotation: 360,
-        duration: 20,
-        ease: "none",
-        repeat: -1
-      });
+    // Icon rotation animation - MUCH SLOWER
+    gsap.to(iconRef.current, {
+      rotation: 360,
+      duration: 60, // 🐌 MUCH SLOWER (was 20)
+      ease: "none",
+      repeat: -1
+    });
 
-    }, cardRef);
+  }, cardRef);
 
-    return () => ctx.revert();
-  }, [index]);
+  return () => ctx.revert();
+}, [index]);
 
   const isLeft = index % 2 === 0;
   const cardColors = [
@@ -207,88 +202,84 @@ const Roadmap = () => {
   const speechBubbleRef = useRef(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Initial setup
-      gsap.set(titleRef.current, { 
-        scale: 0, 
-        rotation: -10, 
-        transformOrigin: "center center" 
-      });
-      gsap.set(subtitleRef.current, { 
-        x: -200, 
-        opacity: 0, 
-        rotation: 5 
-      });
-      gsap.set(speechBubbleRef.current, { 
-        scale: 0, 
-        rotation: 10, 
-        transformOrigin: "bottom center" 
-      });
+  const ctx = gsap.context(() => {
+    // Initial setup - hide elements
+    gsap.set(titleRef.current, { 
+      scale: 0, 
+      rotation: -10, 
+      transformOrigin: "center center" 
+    });
+    gsap.set(subtitleRef.current, { 
+      x: -200, 
+      opacity: 0, 
+      rotation: 5 
+    });
+    gsap.set(speechBubbleRef.current, { 
+      scale: 0, 
+      rotation: 10, 
+      transformOrigin: "bottom center" 
+    });
 
-      // Title entrance animation
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          toggleActions: "play none none reverse"
-        }
-      });
-
-      tl.to(titleRef.current, {
-        scale: 1,
-        rotation: 0,
-        duration: 0.8,
-        ease: "bounce.out"
-      })
-      .to(subtitleRef.current, {
-        x: 0,
-        opacity: 1,
-        rotation: 0,
-        duration: 0.6,
-        ease: "power2.out"
-      }, "-=0.4")
-      .to(speechBubbleRef.current, {
-        scale: 1,
-        rotation: 0,
-        duration: 0.5,
-        ease: "back.out(1.7)"
-      }, "-=0.3");
-
-      // Continuous animations
-      gsap.to(titleRef.current, {
-        color: "#fbbf24", // yellow-400
-        duration: 2,
-        ease: "power2.inOut",
-        yoyo: true,
-        repeat: -1,
-        delay: 2
-      });
-
-      gsap.to(speechBubbleRef.current, {
-        rotation: 2,
-        duration: 1.5,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
-        delay: 3
-      });
-
-      // Typing effect for speech bubble
-      const speechText = speechBubbleRef.current?.querySelector('.speech-text');
-      if (speechText) {
-        gsap.to(speechText, {
-          text: "THE JOURNEY TO GREATNESS!",
-          duration: 2,
-          ease: "none",
-          delay: 4
-        });
+    // ⚡ INSTANT TEXT APPEARANCE - NO STAGGERED ANIMATIONS
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top 80%",
+        end: "bottom 20%",
+        toggleActions: "play none none reverse"
       }
+    });
 
-    }, containerRef);
+    // Everything appears at once - no delays or staggers
+    tl.to([
+      titleRef.current,
+      subtitleRef.current,
+      speechBubbleRef.current
+    ], {
+      opacity: 1,
+      x: 0,
+      scale: 1,
+      rotation: 0,
+      duration: 0.4, // Single fast animation
+      ease: "power2.out"
+    });
 
-    return () => ctx.revert();
-  }, []);
+    // 🐌 MUCH SLOWER CONTINUOUS ANIMATIONS
+    // Title text color animation - MUCH SLOWER
+    gsap.to(titleRef.current, {
+      color: "#fbbf24", // yellow-400
+      duration: 6, // 🐌 MUCH SLOWER (was 2)
+      ease: "power2.inOut",
+      yoyo: true,
+      repeat: -1,
+      delay: 3 // Longer delay
+    });
+
+    // Speech bubble wiggle - MUCH SLOWER
+    gsap.to(speechBubbleRef.current, {
+      rotation: 2, // Keep same rotation amount
+      duration: 4, // 🐌 MUCH SLOWER (was 1.5)
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: -1,
+      delay: 5 // Longer delay
+    });
+
+    // Typing effect for speech bubble - keep the typing effect
+    const speechText = speechBubbleRef.current?.querySelector('.speech-text');
+    if (speechText) {
+      gsap.to(speechText, {
+        text: "THE JOURNEY TO GREATNESS!",
+        duration: 2, // Keep typing effect visible
+        ease: "none",
+        delay: 2 // Start shortly after content appears
+      });
+    }
+
+  }, containerRef);
+
+  return () => ctx.revert();
+}, []);
 
   return (
     <div ref={containerRef} className="relative min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900 p-8">

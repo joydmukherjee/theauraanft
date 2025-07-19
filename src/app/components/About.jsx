@@ -85,199 +85,144 @@ const About = () => {
   const speechBubbleRef = useRef(null);
   const servicesGridRef = useRef(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Initial setup - hide elements
-      gsap.set([leftPanelRef.current, rightPanelRef.current], { 
-        opacity: 0, 
-        y: 100, 
-        rotation: 5 
-      });
-      gsap.set(titleRef.current, { 
-        scale: 0, 
-        rotation: -10, 
-        transformOrigin: "center center" 
-      });
-      gsap.set(subtitleRef.current, { 
-        x: -200, 
-        opacity: 0, 
-        rotation: 5 
-      });
-      gsap.set(contentSectionsRef.current, { 
-        x: -100, 
-        opacity: 0, 
-        stagger: 0.1 
-      });
-      gsap.set(buttonsRef.current, { 
-        y: 50, 
-        opacity: 0, 
-        scale: 0.8 
-      });
-      gsap.set(speechBubbleRef.current, { 
-        scale: 0, 
-        rotation: 10, 
-        transformOrigin: "bottom left" 
-      });
-      gsap.set(servicesGridRef.current, {
-        y: 100,
-        opacity: 0
-      });
+useEffect(() => {
+  const ctx = gsap.context(() => {
+    // Initial setup - hide elements
+    gsap.set([leftPanelRef.current, rightPanelRef.current], { 
+      opacity: 0, 
+      y: 100, 
+      rotation: 5 
+    });
+    gsap.set(titleRef.current, { 
+      scale: 0, 
+      rotation: -10, 
+      transformOrigin: "center center" 
+    });
+    gsap.set(subtitleRef.current, { 
+      x: -200, 
+      opacity: 0, 
+      rotation: 5 
+    });
+    gsap.set(contentSectionsRef.current, { 
+      x: -100, 
+      opacity: 0, 
+      stagger: 0.1 
+    });
+    gsap.set(buttonsRef.current, { 
+      y: 50, 
+      opacity: 0, 
+      scale: 0.8 
+    });
+    gsap.set(speechBubbleRef.current, { 
+      scale: 0, 
+      rotation: 10, 
+      transformOrigin: "bottom left" 
+    });
+    gsap.set(servicesGridRef.current, {
+      y: 100,
+      opacity: 0
+    });
 
-      // Main timeline
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          toggleActions: "play none none reverse"
-        }
-      });
+    // ⚡ INSTANT TEXT APPEARANCE - NO STAGGERED ANIMATIONS
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top 90%",
+        end: "bottom 20%",
+        toggleActions: "play none none reverse"
+      }
+    });
 
-      // Panel entrance animations
-      tl.to([leftPanelRef.current, rightPanelRef.current], {
-        opacity: 1,
-        y: 0,
-        rotation: 0,
-        duration: 1.2,
-        ease: "back.out(1.7)",
-        stagger: 0.2
-      })
-      // Title animation with bounce effect
-      .to(titleRef.current, {
-        scale: 1,
-        rotation: 0,
-        duration: 0.8,
-        ease: "bounce.out"
-      }, "-=0.8")
-      // Subtitle slide in
-      .to(subtitleRef.current, {
-        x: 0,
-        opacity: 1,
-        rotation: 0,
-        duration: 0.6,
-        ease: "power2.out"
-      }, "-=0.4")
-      // Content sections staggered entrance
-      .to(contentSectionsRef.current, {
-        x: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "power2.out",
-        stagger: 0.15
-      }, "-=0.3")
-      // Button pop in
-      .to(buttonsRef.current, {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 0.4,
-        ease: "back.out(1.7)",
-        stagger: 0.1
-      }, "-=0.2")
-      // Speech bubble pop
-      .to(speechBubbleRef.current, {
-        scale: 1,
-        rotation: 0,
-        duration: 0.5,
-        ease: "back.out(1.7)"
-      }, "-=0.6")
-      // Services grid entrance
-      .to(servicesGridRef.current, {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease: "power2.out"
-      }, "-=0.2");
+    // Everything appears at once - no delays or staggers
+    tl.to([
+      leftPanelRef.current, 
+      rightPanelRef.current,
+      titleRef.current,
+      subtitleRef.current,
+      ...contentSectionsRef.current,
+      ...buttonsRef.current,
+      speechBubbleRef.current,
+      servicesGridRef.current
+    ], {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      scale: 1,
+      rotation: 0,
+      duration: 0.4, // Single fast animation
+      ease: "power2.out"
+    });
 
-      // Continuous animations
-      // Floating animation for panels (flipped)
-      gsap.to(leftPanelRef.current, {
-        y: -3,
-        rotation: 0.5,
-        duration: 4,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1
-      });
+    // 🎯 MINIMAL MOVEMENT - BARELY NOTICEABLE FOR BOTH PANELS
+    // Very subtle breathing effect for left panel - SAME AS RIGHT
+    gsap.to(leftPanelRef.current, {
+      y: -0.5, // 🎯 EXTREMELY SUBTLE
+      rotation: 0.1, // 🎯 BARELY VISIBLE
+      duration: 10, // 🎯 VERY SLOW - SAME AS RIGHT
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: -1,
+      delay: 1 // Slight offset from right panel
+    });
 
-      gsap.to(rightPanelRef.current, {
-        y: -20,
-        rotation: -2,
-        duration: 2.5,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
-        delay: 0.5
-      });
+    gsap.to(rightPanelRef.current, {
+      y: -0.5, // 🎯 EXTREMELY SUBTLE
+      rotation: -0.1, // 🎯 BARELY VISIBLE
+      duration: 10, // 🎯 VERY SLOW
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: -1,
+      delay: 2
+    });
 
-      // Additional right panel movement
-      gsap.to(rightPanelRef.current, {
-        x: 5,
-        duration: 3,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
-        delay: 1
-      });
+    // Remove additional right panel movement entirely
+    // (commented out the x-axis movement)
 
-      // Title text color animation
-      gsap.to(titleRef.current, {
-        color: "#fbbf24", // yellow-400
-        duration: 2,
-        ease: "power2.inOut",
-        yoyo: true,
-        repeat: -1,
-        delay: 2
-      });
+    // Remove title text color animation entirely
+    // (commented out the color animation)
 
-      // Speech bubble wiggle
-      gsap.to(speechBubbleRef.current, {
-        rotation: 2,
-        duration: 1.5,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
-        delay: 3
-      });
+    // Remove speech bubble wiggle entirely
+    // (commented out the speech bubble rotation)
 
-      // Button hover animations
-      buttonsRef.current.forEach((button) => {
-        if (button) {
-          button.addEventListener('mouseenter', () => {
-            gsap.to(button, {
-              scale: 1.1,
-              rotation: 2,
-              duration: 0.3,
-              ease: "power2.out"
-            });
+    // Button hover animations - FASTER AND MORE SUBTLE
+    buttonsRef.current.forEach((button) => {
+      if (button) {
+        button.addEventListener('mouseenter', () => {
+          gsap.to(button, {
+            scale: 1.05, // 🎯 MORE SUBTLE (was 1.1)
+            rotation: 1, // 🎯 MORE SUBTLE (was 2)
+            duration: 0.2, // ⚡ FASTER (was 0.3)
+            ease: "power2.out"
           });
-          
-          button.addEventListener('mouseleave', () => {
-            gsap.to(button, {
-              scale: 1,
-              rotation: 0,
-              duration: 0.3,
-              ease: "power2.out"
-            });
+        });
+        
+        button.addEventListener('mouseleave', () => {
+          gsap.to(button, {
+            scale: 1,
+            rotation: 0,
+            duration: 0.2, // ⚡ FASTER (was 0.3)
+            ease: "power2.out"
           });
-        }
-      });
-
-      // Typing effect for speech bubble
-      const speechText = speechBubbleRef.current?.querySelector('.speech-text');
-      if (speechText) {
-        gsap.to(speechText, {
-          text: "BREAK THE CODE.",
-          duration: 2,
-          ease: "none",
-          delay: 4
         });
       }
+    });
 
-    }, containerRef);
+    // Typing effect for speech bubble - KEEP THE TYPING EFFECT
+    const speechText = speechBubbleRef.current?.querySelector('.speech-text');
+    if (speechText) {
+      gsap.to(speechText, {
+        text: "BREAK THE CODE.",
+        duration: 1.5, // Nice typing speed
+        ease: "none",
+        delay: 1 // Start shortly after content appears
+      });
+    }
 
-    return () => ctx.revert();
-  }, []);
+  }, containerRef);
+
+  return () => ctx.revert();
+}, []);
+
 
 return (
   <div ref={containerRef} className="relative min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900 p-4 sm:p-6 md:p-8">

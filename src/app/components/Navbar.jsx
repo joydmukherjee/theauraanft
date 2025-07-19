@@ -102,7 +102,8 @@ const Navbar = ({ isMuted, onToggleSound }) => {
             }}
           >
             <img
-              src="/Aura_purple.png"
+              //src="/Aura_purple.png"
+              src="/Aura_white_nobg.png"
               alt="logo"
               className="w-14 h-14 ml-8 -mt-2 object-contain"
             />
@@ -126,7 +127,7 @@ const Navbar = ({ isMuted, onToggleSound }) => {
           </Link> */}
           <button
             onClick={() => setShowPasswordModal(true)}
-            className="flex items-center justify-center text-white font-semibold px-4 py-2 bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-300 hover:to-blue-500 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none"
+            className="flex items-center justify-center text-white font-semibold px-4 py-2 bg-gradient-to-r from-purple-400 to-purple-600 hover:from-purple-300 hover:to-purple-500 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none"
           >
             <FaPlay size={24} className="mr-2" /> Avatar
           </button>
