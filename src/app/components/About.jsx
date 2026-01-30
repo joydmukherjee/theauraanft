@@ -292,7 +292,7 @@ return (
                             <><span className="text-pink-400 font-bold">But this story doesn't live in books.</span> It lives on-chain.</>,
                             <><span className="text-blue-400 font-bold">Every collectible is more than art:</span> it's a pass to the future, character with purpose, a presence in a living world.</>,
                             <><span className="text-green-400 font-bold">In Web3, you don't follow a story...</span> you become part of it. Your Aura begins to form.</>,
-                            <><span className="text-orange-400 font-bold">And then it grows...</span> into a 3D identity, into a VR-ready version of you.</>,
+                            <><span className="text-orange-400 font-bold">And then it grows</span>...</>,
                             <>We grow with the community. We educate, we open opportunities. We create a space where everyone matters.</>,
                             <>AURA DOES NOT BUILD FOR THE FUTURE. IT OWNS THE FUTURE.</>
                           ][i]}

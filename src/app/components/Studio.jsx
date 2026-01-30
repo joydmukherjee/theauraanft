@@ -280,7 +280,7 @@ return (
                   >
                     <div className="comic-dots absolute inset-0 opacity-10"></div>
                     <h3 className="text-yellow-400 font-bold text-lg lg:text-xl mb-2 font-comic relative z-10">WHAT'S HAPPENING NOW:</h3>
-                    <p className="text-sm lg:text-lg font-medium relative z-10">3D avatars in production. From Aura originals to community heroes — every avatar has purpose and future utility.</p>
+                    <p className="text-sm lg:text-lg font-medium relative z-10">NFT collection art is being finalized and prepared for minting. MVP of our FUN-TO-PLAY game is underway, alongwith an amazing trailer.</p>
                   </div>
 
                   <div 
@@ -292,14 +292,7 @@ return (
                     <p className="text-sm lg:text-lg font-medium relative z-10">Stylized trailers, character reveals, and immersive visuals in the works.</p>
                   </div>
 
-                  <div 
-                    ref={el => contentSectionsRef.current[2] = el}
-                    className="bg-black bg-opacity-50 p-3 lg:p-4 rounded-lg border-2 border-blue-400 relative overflow-hidden"
-                  >
-                    <div className="comic-dots absolute inset-0 opacity-10"></div>
-                    <h3 className="text-blue-400 font-bold text-lg lg:text-xl mb-2 font-comic relative z-10">PRIVATE WORKSHOPS:</h3>
-                    <p className="text-sm lg:text-lg font-medium relative z-10">We teach drawing, 3D modeling, and digital design — for the insiders.</p>
-                  </div>
+                  
 
                   <div 
                     ref={el => contentSectionsRef.current[3] = el}
@@ -307,7 +300,7 @@ return (
                   >
                     <div className="comic-dots absolute inset-0 opacity-10"></div>
                     <h3 className="text-green-400 font-bold text-lg lg:text-xl mb-2 font-comic relative z-10">CUSTOM COMMISSIONS:</h3>
-                    <p className="text-sm lg:text-lg font-medium relative z-10">Every request fuels the Studio and brings you closer to whitelist access.</p>
+                    <p className="text-sm lg:text-lg font-medium relative z-10">Every request fuels the Studio and we are open for commissions.</p>
                   </div>
 
                   <div 
@@ -316,7 +309,7 @@ return (
                   >
                     <div className="comic-dots absolute inset-0 opacity-10"></div>
                     <h3 className="text-orange-400 font-bold text-lg lg:text-xl mb-2 font-comic relative z-10">COLLABORATIONS:</h3>
-                    <p className="text-sm lg:text-lg font-medium relative z-10">From visuals to lore-based designs, Aura Studio crafts immersive stories.</p>
+                    <p className="text-sm lg:text-lg font-medium relative z-10">From visuals to lore-based designs, Aura Studio crafts immersive stories. We are open for collaborations.</p>
                   </div>
                 </div>
 
@@ -336,13 +329,13 @@ return (
                   >
                     🎨 COMMISSION
                   </button>
-                  <button 
+                  {/* <button 
                     ref={el => buttonsRef.current[2] = el}
                     onClick={() => handleModalOpen("learn")} 
                     className="bg-blue-500 hover:bg-blue-400 text-white font-bold px-4 lg:px-6 py-2 lg:py-3 rounded-lg border-2 lg:border-4 border-black shadow-lg font-comic text-base lg:text-lg"
                   >
                     🎓 LEARN
-                  </button>
+                  </button> */}
                 </div>
 
                 {/* Connect Prompt */}

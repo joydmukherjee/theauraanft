@@ -152,27 +152,27 @@ const experiences = [
     iconBg: "#000000",
     date: "Phase 1",
      points: [
-    { text: "Lore begins to unfold", strikethrough: false },
-    { text: "Community rituals and daily check-ins launch", strikethrough: false },
+    { text: "Lore begins to unfold  centered on 'BREAK THE CODE'", strikethrough: false },
+    { text: "Community rituals and daily check-ins launch to build passionate engagement", strikethrough: false },
     { text: "Leaderboard opens", strikethrough: false },
-    { text: "Whitelist is earned through action", strikethrough: false },
-    { text: "2D character collection mints", strikethrough: false },
-    { text: "3D avatars enter production", strikethrough: false },
+    { text: "Aura NFT collection mints", strikethrough: false },
+    
     
     
   ],
   },
   {
-    title: "Expansion",
+    title: "World Building",
     company_name: "Tesla",
     icon: "/Aura_purple_nobg.png",
     iconBg: "#000000",
     date: "Phase 2",
      points: [
-    { text: "Airdrop of 3D avatars to holders", strikethrough: false },
-    { text: "VR integration and interactive experiences evolve", strikethrough: false },
-    { text: "Aura’s animated series goes into development", strikethrough: false },
-    { text: "Storytelling expands across media", strikethrough: false },
+    { text: "Game development kicks off with core Fun-To-Play mechanics", strikethrough: false },
+    { text: "Integrate 'BREAK THE CODE' into gameplay", strikethrough: false },
+    { text: "Combat systems refined, emphasizing addictive gameplay over tokenomics", "strikethrough": false },
+    { text: "Community feedback loops established", strikethrough: false },
+    { text: "Initial prototypes and teasers released to holders", strikethrough: false },
     
     
   ],
@@ -184,10 +184,9 @@ const experiences = [
     iconBg: "#000000",
     date: "Phase 3",
      points: [
-    { text: "Airdrop of 3D pets to holders", strikethrough: false },
-    { text: "Avatars come to life across platforms", strikethrough: false },
-    { text: "Community lore enters canon", strikethrough: false },
-    { text: "Web3 events and people join the universe", strikethrough: false },
+    { text: "NFT holders gain early access to game betas", strikethrough: false },
+     { text: "Community feedback loops established to shape the game", "strikethrough": false },
+    { text: "Web3 events and collaborations", strikethrough: false },
     
   ],
   },
@@ -198,9 +197,10 @@ const experiences = [
     iconBg: "#000000",
     date: "Phase 4",
      points: [
-    { text: "Game world begins development", strikethrough: false },
-    { text: "Characters move from collectibles to playable identities", strikethrough: false },
-    
+    { text: "Full game world launches", strikethrough: false },
+    { text: "Ongoing updates and expansions based on community input", strikethrough: false },
+    { text: "Cross-media storytelling evolves, including potential animated content", strikethrough: false },
+    { text: "Global tournaments and events", strikethrough: false },
   ],
   },
 ];
