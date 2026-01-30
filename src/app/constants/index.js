@@ -128,7 +128,7 @@ const technologies = [
   },
   {
     name: "discord",
-    url : "https://discord.gg/sDh4kwcY",
+    url : "https://discord.gg/VRUFnmkcaH",
     localUrl : "./D.glb",
   },
   {
