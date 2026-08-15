@@ -322,7 +322,7 @@ const Navbar = ({ isMuted, onToggleSound }) => {
             {toggleWallet === true && (
               <li className="flex items-center mt-[-12px] ">
                 <a
-                  href="https://discord.gg/VRUFnmkcaH"
+                  href="https://discord.gg/Hm2bd83Vcx"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -387,7 +387,7 @@ const Navbar = ({ isMuted, onToggleSound }) => {
             {toggleWallet === false && (
               <li className="flex items-center">
                 <a
-                  href="https://discord.gg/VRUFnmkcaH"
+                  href="https://discord.gg/Hm2bd83Vcx"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -518,7 +518,7 @@ const Navbar = ({ isMuted, onToggleSound }) => {
                 </li>
                 <li className="flex items-center">
                   <a
-                    href="https://discord.gg/VRUFnmkcaH"
+                    href="https://discord.gg/Hm2bd83Vcx"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
